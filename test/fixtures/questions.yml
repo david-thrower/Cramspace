@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  body: MyText
+  questionformat: 1
+  tfcredited: false
+  tfresponse: false
+  multiplecredited: 1
+  multipleresponse: 1
+  fibcredited: MyString
+  fibresponse: MyString
+  correct: false
+  pointspossible: 1
+  pointsearned: 1
+  deleted: false
+  answercomment: MyText
+
+two:
+  title: MyString
+  body: MyText
+  questionformat: 1
+  tfcredited: false
+  tfresponse: false
+  multiplecredited: 1
+  multipleresponse: 1
+  fibcredited: MyString
+  fibresponse: MyString
+  correct: false
+  pointspossible: 1
+  pointsearned: 1
+  deleted: false
+  answercomment: MyText
