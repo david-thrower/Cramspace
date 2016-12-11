@@ -1,0 +1,148 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<div class="container">
+    <div class="row bg-success">
+        <div class="col-md-offset-4">
+
+            <strong>
+                <h1>
+                    Let's see how we did!!
+                </h1>
+            </strong>
+        </div> <!-- end of the column -->
+    </div> <!-- end of the row -->
+<% total_points_earned = [] %>
+<% total_points_possible = [] %>
+<div class="row bg-info">
+    <table class="table table-hover">
+        <tr>
+            <th>Question Title</th>
+            <th>Question Format</th>
+            <th>Question Text</th>
+            <th>Expected Answer</th>
+            <th>Your Response</th>
+            <th>Points Possible</th>
+            <th>Points Earned</th>
+           
+        </tr>
+        <% @questions.each do |q| %>
+        <% if (q.deleted == false or q.deleted == nil) %>
+           <% total_points_possible.push(q.pointspossible) %>
+            <tr>
+                <td><%= q.title %>
+                <% if q.questionformat == 1 %>
+                <td>  True or False </td>
+                <% elsif q.questionformat == 2 %>
+                <td> Multiple Choice </td>
+                <% elsif q.questionformat ==3 %>
+                <td> Fill in the Blank</td>
+                <% end %>
+                <td><%= q.body %></td>
+                <%if q.questionformat == 1 %>
+                <% expected_answer = q.tfcredited %>
+                <% elsif q.questionformat == 2 %>
+                <% expected_answer = q.multiplecredited %>
+                <% elsif q.questionformat == 3 %>
+                <% expected_answer = q.fibcredited %>
+                <% else expected_answer = "ERROR! Call customer service." %>
+                <% end %>
+                <td><%= expected_answer %></td>
+                
+               
+                <% if q.questionformat == 1 %>
+                    <td><%= q.tfresponse %></td>
+                <% elsif q.questionformat == 2 %>
+                    <% if q.multipleresponse == 1 %>
+                        <td>A</td>
+                    <% elsif q.multipleresponse == 2 %>
+                        <td>B</td>
+                    <% elsif q.multipleresponse == 3 %>
+                        <td>C</td>
+                    <% elsif q.multipleresponse == 4 %>
+                        <td>D</td>
+                    <% end %>
+                <% else %>
+                <td>Error! Call customer service.</td>
+                <% end %>
+                <td><%= q.pointspossible %></td>
+                <%if q.questionformat == 1 %>
+                <% your_response = q.tfresponse %>
+                <% elsif q.questionformat == 2 %>
+                <% your_response = q.multipleresponse %>
+                <% elsif q.questionformat == 3 %>
+                <% your_response = q.fibresponse %>
+                <% else your_response = "ERROR! Call customer service." %>
+                <% end %>
+                <% if your_response == expected_answer %>
+                    <% total_points_earned.push(q.pointspossible) %>
+                    <% q.correct = true %>
+                    <% q.save %>
+                    <td><%=  q.pointspossible  %></td>
+                <% elsif q.questionformat == 3 %>
+                    <% if your_response.chomp.upcase == expected_answer.chomp.upcase %>
+                         <% total_points_earned.push(q.pointspossible) %>
+                         <% q.correct = true %>
+                        <% q.save %>
+                        <td><%= q.pointspossible %></td>
+                         
+                    <% end %>
+                <% else %>
+                    <td>0</td>
+                <% end %>
+            </tr>
+            <% end %>
+        <% end %>
+       
+       
+       
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="bg-success">Total Points Possible</td>
+            <td class="bg-success"><%= total_points_possible.sum.round %></td>
+            <td class="bg-success"> Total Points Earned</td>
+            <td class="bg-success"><%= total_points_earned.sum.round %></td>  
+        </tr> 
+         <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="bg-warning">Your grade!!!!!</td>
+            <% if total_points_possible != 0 %>
+            <td class="bg-warning"><%= (100 * (total_points_earned.sum / total_points_possible.sum )).round %></td>  
+            <% else %>
+            <td class="bg-warning">ERROR! Call customer service.</td>
+            <% end %>
+        </tr>
+        
+        
+    </table>
+</div> <!-- end of row for table -->
+<div class="row bg-success">
+<div class="col-md-offset-4">
+<h3>Where to from here?!</h3>
+<p>
+    
+    <%= link_to "Add a new question!!!", new_question_path  %> <br>
+    <%= link_to "Back to the list of questions an answers to study!", questions_path %>
+<br>
+    <%= link_to "To the list of questiosn you already know!", questions_completed_path  %>
+</p>
+<p>
+    <%= link_to "See deleted items", questions_deleted_path %>
+</p>
+</div>
+</div>
+</div> <!-- end of container -->

@@ -1,0 +1,89 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<div class="container">
+    
+        <table class="table table-hover">
+            <tr class="bg-success">
+                <td colspan="7" class="text-center"> <h1><strong>List of study questions you haven't gotten correct yet</strong></h1> </td>
+            </tr>
+            <tr class="bg-success">
+                <td colspan="7"> <h2 class="text-center"> Study these then below, then there is a link to the quiz. </h2></td>
+            </tr>
+            
+            
+            <tr class="info">
+                <th>Question Title</th>
+                <th>Question Format</th>
+                <th>Question Text</th>
+                <th>Answered Correctly</th>
+                <th>Question Answer/comment</th>
+                <th class="warning">Edit Question</th>
+                <th class="warning">Delete Question</th>
+            </tr>
+            <% @questions.each do |q| %>
+                <tr class="info">
+                    <td><%= q.title %>
+                    <% if q.questionformat == 1 %>
+                        <td>  True or False </td>
+                    <% elsif q.questionformat == 2 %>
+                        <td> Multiple Choice </td>
+                    <% elsif q.questionformat ==3 %>
+                        <td> Fill in the Blank</td>
+                    <% end %>
+                    <td><%= q.body %></td>
+                    <% if q.correct == true %>
+                        <td>You got it right!</td>
+                    <% elsif q.correct == false %>
+                        <td>Not yet. Keep studying!!</td>
+                    <% end %>    
+                    <td><%= q.answercomment %></td>
+                    <td class="warning"><%= link_to "Edit", edit_question_path(:id => q.id) %></td>
+                    <td class="warning"><%= button_to "Delete", question_path(:id => q.id), :method => :delete, :class => 'btn btn-danger' ,  data: { confirm: 'Are you sure?' }%></td>
+                </tr>
+                
+        <% end %>
+       
+    
+        <tr class="bg-success">
+            <td colspan="7" class="text-center">
+                <h1>Your Next Steps!</h1>
+            </td>
+        <tr/>
+        <tr class="bg-success">
+            <td colspan="7" class="text-center">
+                <%= link_to "Try your luck at the quiz!!! (Click here!)", questions_quiz_path %>
+            </td>
+        </tr>
+        <tr class="bg-success">
+            <td colspan="7" class="text-center">
+                <%= link_to "Back to the list of questions an answers to study!", questions_path %>
+            </td>
+        </tr>
+        
+        <tr class="bg-success">
+            <td colspan="7" class="text-center">
+                <%= link_to "Go to the list of questions you have already goten right!", questions_completed_path %>
+            </td>
+        </tr>
+        
+        <tr class="bg-success">
+            <td colspan="7" class="text-center">
+               <%= link_to "See deleted items", questions_deleted_path %>
+            </td>
+        </tr>
+        
+        
+        <tr class="bg-success">
+            <td colspan="7" class="text-center">
+                <%= link_to "Add a new question!!!", new_question_path  %>              
+            </td>
+        </tr>
+    </table>
+</div>

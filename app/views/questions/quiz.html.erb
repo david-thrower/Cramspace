@@ -1,0 +1,120 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<div class="container">
+   <div class="row bg-success">
+        <div class="col-md-offset-4">
+            <h2> Let's see what we know! </h2>
+        </div>
+    </div>
+    <div class ="row bg-info">
+        <table class="table table-hover">
+            <tr>
+                <th>Question Title</th>
+                <th>Question Format</th>
+                <th>Question Text</th>
+                <th>Pick an Answer</th>
+                <th>Your Response</th>
+            </tr>
+            <% @questions.each do |q| %>
+                <tr>
+                <td><%= q.title %>
+                <% if q.questionformat == 1 %>
+                    <td>  True or False </td>
+                <% elsif q.questionformat == 2 %>
+                    <td> Multiple Choice </td>
+                <% elsif q.questionformat ==3 %>
+                    <td> Fill in the Blank</td>
+                <% end %>
+                <td><%= q.body %></td>
+                <% if q.questionformat == 2 %>
+                    <td>
+                        <%= button_to "A", question_multiple_a_path(:id => q.id), :method => :patch, :class => 'btn btn-info'  %>
+                        <%= button_to "B", question_multiple_b_path(:id => q.id), :method => :patch, :class => 'btn btn-info'   %>
+                        <%= button_to "C", question_multiple_c_path(:id => q.id), :method => :patch, :class => 'btn btn-info'   %>
+                        <%= button_to "D", question_multiple_d_path(:id => q.id), :method => :patch, :class =>  'btn btn-info'   %>
+                    </td>
+                <% elsif q.questionformat == 1 %>
+                    <td>
+                        <%= button_to "True", question_tf_t_path(:id => q.id), :method => :patch, :class => 'btn btn-info'  %>
+                        <%= button_to "False", question_tf_f_path(:id => q.id), :method => :patch, :class => 'btn btn-info'  %>
+                    </td>
+                <% elsif q.questionformat == 3 %>
+                    <td>
+                        <%= form_for :question, url: question_fib_path(:id => q.id), method: :patch do |f| %>
+                        <%= f.label "Enter your answer:" %>
+                        <%= f.text_field :fibresponse, :class => "form_control" %>
+                        <%= f.submit "Click to enter your answer!" %>
+                        <% end %>
+                    </td>
+                <% else %>
+                    <td>ERROR! CALL CUSTOMER SERVICE</td>
+                <% end %>
+                <% if q.questionformat == 1 %>
+                    <td><%= q.tfresponse %></td>
+                <% elsif q.questionformat == 2 %>
+                    <% if q.multipleresponse == 1 %>
+                        <td>A</td>
+                    <% elsif q.multipleresponse == 2 %>
+                        <td>B</td>
+                    <% elsif q.multipleresponse == 3 %>
+                        <td>C</td>
+                    <% elsif q.multipleresponse == 4 %>
+                        <td>D</td>
+                    <% end %>
+                <% elsif q.questionformat == 3 %>
+                    <% if q.fibresponse == '' or q.fibresponse == nil %>
+                        <td class="bg-danger">
+                            NOT ANSWERED YET
+                        </td>
+                    <% else %>
+                        <td>
+                            <%= q. fibresponse %>
+                        </td>
+                    <% end %>
+                <% else %>
+                    <td>Error! Call customer service.</td>
+                <% end %>
+                </tr>
+            <% end %>
+</table>
+</div>
+<div class="row bg-success">
+    <strong>
+        <div class="col-md-offset-2">
+            <h1>
+                <%= link_to "See how you did on this quiz! (CLICK HERE!)", questions_grade_path %>
+            </h1>
+        </div>
+    </strong>
+    
+    <div class="col-md-offset-2">
+        <h3>Where to from here?!</h3>
+        <p>
+            <%= link_to "Add a new question!!!", new_question_path  %> <br>
+        </p>
+    </div>
+    <div class="col-md-offset-2">
+        <p>
+            <%= link_to "Back to the list of questions an answers to study!", questions_path %>
+        </p>
+    </div>
+    <div class="col-md-offset-2">
+        <p> 
+            <%= link_to "To the list of questiosn you already know!", questions_completed_path  %>
+        </p>
+    </div>    
+    <div class="col-md-offset-2">
+        <p>
+            <%= link_to "See deleted items", questions_deleted_path %>
+        </p>
+    </div>
+    </div>
+</div>

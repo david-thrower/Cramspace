@@ -1,0 +1,104 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+
+<strong><h1>  </h1> </strong>
+
+<div class="container">
+<div class="row bg-success">
+  <div class="col-lg-6 col-lg-offset-3">
+    <strong><h1> Modify this question! </h1></strong>
+  </div>
+</div>
+<div class="row bg-info">
+
+<%= form_for :question, url: question_path(@question), method: :patch do |f| %>
+<%# = form_for @question do |f| %>
+
+ 
+    <% if @question.errors.any? %>
+      <div id="error_explanation">
+        <h2>
+          <%= pluralize(@question.errors.count, "error") %> prohibited
+          this question from being saved:
+        </h2>
+        <ul>
+          <% @question.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+  
+  <div class="form-group"> 
+     <%= f.label "question type:" %> 
+    <br>
+    <%= f.radio_button :questionformat, 1 %>
+    <%= f.label "True or false" %>
+    <%= f.radio_button :questionformat, 2 %>
+    <%= f.label "Multiple Choice"  %>
+    <%= f.radio_button :questionformat, 3 %>
+    <%= f.label "Fill in the blank"  %>
+ </div>
+  <div class="form-group">
+    <%= f.label "Question Title:" %>
+    <%= f.text_field :title, size: "50", :class => 'form-control'  %>
+  </div>
+  <div class="form-group">
+    <%= f.label "Question body:"  %>
+    <%= f.text_area :body, size: "40x12", :class => 'form-control'  %>
+  </div>  
+  <p> 
+    <%= f.label "Correct answer IF True or False:" %>
+  <br>
+    <%= f.radio_button :tfcredited, true, :class => 'radio-inline'  %>
+    <%= f.label "True"  %>
+    <%= f.radio_button :tfcredited, false, :class => 'radio-inline' %>
+    <%= f.label "False"  %>
+  
+  </p>   
+  <p>
+    <%= f.label "Correct answer if Multiple choice:" %>
+    <%= f.radio_button :multiplecredited, 1  %>
+    <%= f.label "A"  %>
+    <%= f.radio_button :multiplecredited, 2 %>
+    <%= f.label "B"  %>
+    <%= f.radio_button :multiplecredited, 3 %>
+    <%= f.label "C"  %>
+    <%= f.radio_button :multiplecredited, 4 %>
+    <%= f.label "D"  %>
+  
+  </p>
+  <div class="form-group">
+    <%= f.label "Correct answer if fill in the blank:" %>
+    <%= f.text_field :fibcredited, :class => 'form-control' %>
+  </div>
+  <div class='form-group'>
+    <%= f.label "Answer or comment explaining the question!" %>
+    <%= f.text_field :answercomment, :class => 'form-control' %>
+  </div>
+   <%= f.label  "Points possible" %>
+   <%= f.select :pointspossible, options_for_select(1..20) %>
+   </p>
+     
+   <p>
+      <%= f.submit "Edit this question!", :class => 'btn btn-warning' %>
+    </p>
+  
+  <% end %>
+
+  <h3>Where to from here?!</h3>
+
+  <%= link_to "Back to List of Questions", questions_path %>
+</div>
+</div>

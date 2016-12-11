@@ -13,5 +13,6 @@ Rails.application.routes.draw do
   patch 'completed/:id/move', to: 'questions#move', as: 'question_move'
   get 'questions/deleted', to: 'questions#deleted', as: 'questions_deleted'
   patch 'questions/deleted/:id/undelete', to: 'questions#undelete', as:  'question_undelete'
+  patch 'questions/quiz/:id/selectfib', to: 'questions#question_fib', as: 'question_fib'
   end
 
