@@ -73,10 +73,10 @@ class QuestionsController < ApplicationController
         redirect_to questions_quiz_path
     end   
     def grade
-        @questions = Question.all
+        @questions = Question.where("deleted != ? and correct != ?", true, true)
     end
     def completed
-        @questions = Question.where("correct = ?", true)
+        @questions = Question.where("correct = ? and deleted = ?", true, false )
     end
     def move
         @question = Question.find(params[:id])
@@ -90,6 +90,7 @@ class QuestionsController < ApplicationController
     def undelete
         @question = Question.find(params[:id])
         @question.deleted = false
+        @question.correct = false
         @question.save
         redirect_to questions_deleted_path
         

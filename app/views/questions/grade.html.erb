@@ -33,8 +33,7 @@
            
         </tr>
         <% @questions.each do |q| %>
-        <% if (q.deleted == false or q.deleted == nil) %>
-           <% total_points_possible.push(q.pointspossible) %>
+            <% total_points_possible.push(q.pointspossible) %>
             <tr>
                 <td><%= q.title %>
                 <% if q.questionformat == 1 %>
@@ -68,37 +67,53 @@
                     <% elsif q.multipleresponse == 4 %>
                         <td>D</td>
                     <% end %>
+                <% elsif q.questionformat == 3 %>
+                    <td> <%= q.fibresponse %></td>
                 <% else %>
-                <td>Error! Call customer service.</td>
+                    <td>Error! Call customer service.</td>
                 <% end %>
                 <td><%= q.pointspossible %></td>
+                
                 <%if q.questionformat == 1 %>
-                <% your_response = q.tfresponse %>
+                    <% your_response = q.tfresponse %>
                 <% elsif q.questionformat == 2 %>
-                <% your_response = q.multipleresponse %>
+                    <% your_response = q.multipleresponse %>
                 <% elsif q.questionformat == 3 %>
-                <% your_response = q.fibresponse %>
-                <% else your_response = "ERROR! Call customer service." %>
+                    <% your_response = q.fibresponse %>
+                <% else %>
+                    <%= your_response = "ERROR! Call customer service." %>
                 <% end %>
-                <% if your_response == expected_answer %>
-                    <% total_points_earned.push(q.pointspossible) %>
-                    <% q.correct = true %>
-                    <% q.save %>
-                    <td><%=  q.pointspossible  %></td>
-                <% elsif q.questionformat == 3 %>
+                
+                <% if q.questionformat == 3 %> 
                     <% if your_response.chomp.upcase == expected_answer.chomp.upcase %>
-                         <% total_points_earned.push(q.pointspossible) %>
-                         <% q.correct = true %>
+                            <% total_points_earned.push(q.pointspossible) %>
+                            <% q.correct = true %>
+                            <% q.save %>
+                            <td><%= q.pointspossible %></td>
+                    <% else %>
+                            <% total_points_earned.push(0) %>
+                            <% q.correct = false %>
+                            <% q.save %>                            
+                            <td> 0 </td>
+                    <% end %>
+                <% elsif q.questionformat == 1 or q.questionformat == 2 %>
+                    <% if your_response == expected_answer %>
+                        <% total_points_earned.push(q.pointspossible) %>
+                        <% q.correct = true %>
                         <% q.save %>
-                        <td><%= q.pointspossible %></td>
-                         
+                        <td><%=  q.pointspossible  %></td>
+                    <% else %>
+                        <% total_points_earned.push(0) %>
+                        <% q.correct = false %>
+                        <% q.save %>
+                        <td> 0 </td>                         
                     <% end %>
                 <% else %>
-                    <td>0</td>
+                    <td>ERROR! Call customer service</td>
                 <% end %>
             </tr>
-            <% end %>
-        <% end %>
+          <% end %>
+      
        
        
        
@@ -108,9 +123,12 @@
             <td></td>
             <td></td>
             <td class="bg-success">Total Points Possible</td>
-            <td class="bg-success"><%= total_points_possible.sum.round %></td>
-            <td class="bg-success"> Total Points Earned</td>
-            <td class="bg-success"><%= total_points_earned.sum.round %></td>  
+            <% suma_points_possible = total_points_possible.sum %>
+            <td class="bg-success"><%= suma_points_possible.round %></td>
+            
+            <td class="bg-success"> Total Points Earned </td>
+            <% suma_points_earned = total_points_earned.sum %>
+            <td class="bg-success"><%= suma_points_earned.round %></td>  
         </tr> 
          <tr>
             <td></td>
@@ -120,8 +138,9 @@
             <td></td>
             <td></td>
             <td class="bg-warning">Your grade!!!!!</td>
-            <% if total_points_possible != 0 %>
-            <td class="bg-warning"><%= (100 * (total_points_earned.sum / total_points_possible.sum )).round %></td>  
+            <% if suma_points_possible != 0.00 %>
+                <% grade = (100.0 * (suma_points_earned.to_f / suma_points_possible.to_f)).to_i %>
+                <td class="bg-warning"><%= grade  %></td>  
             <% else %>
             <td class="bg-warning">ERROR! Call customer service.</td>
             <% end %>
